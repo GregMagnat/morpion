@@ -1,37 +1,36 @@
-# Classe Player
+# Class Player avec joueur, plateau et symboles, donc "actions de bases" 
 class Player
     attr_reader :name, :mark
   
-    def initialize(name, mark, board)
+    def initialize(name, mark, board)  #initie un nom de joueur, un symbole et le tableau !
       @name = name
       @mark = mark
       @board = board
     end
   
-    def move(cell)
+    def move(cell)  #permet au joueur de choisir une cellule pour jouer, mettant à jour la grille du jeu via la méthode update_cell
       @board.update_cell(cell, @mark)
     end
   
-    def winner?
-      wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
-      wins.any? do |win|
-        win.all? { |cell| @board.cells[cell] == @mark }
+    def winner?   #controle la victoire d'un joueur avec l'ensemble des combinaisons ci-dessous
+      wins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]] # array avec ensemble des combi
+      wins.any? do |win|  # controle d'un winner, grace à .any? do dans l'array win 
+        win.all? { |cell| @board.cells[cell] == @mark } #vérifie toute les win grace {} (aide de gpt pour cette formule)
       end
     end
   end
   
-  # Classe Board
+  # Class Board concerne ma grille ! 
   class Board
     attr_accessor :cells
   
-    def initialize
-      @cells = (1..9).map(&:to_s)
-    end
+    def initialize #Première méthode pour les règles de mon tableau.
+      @cells = (1..9).map(&:to_s)   #cette ligne de code crée un tableau de neuf éléments, petit coup de main par gpt
   
-    def update_cell(number, mark)
-      if cell_free?(number)
+    def update_cell(number, mark)  méthode concernant le remplissage de mes 9 cases grace à une affectation de chiffre
+      if cell_free?(number) #le if me permet de contoler si ma case et vide ou non afin de la remplir 
         @cells[number - 1] = mark.to_s
-        show_board
+        show_board #permet de mettre à jour l'affichage de ma grille suite à la condition if 
       else
         puts "Cell not empty! Choose another cell."
         return false
@@ -57,7 +56,7 @@ class Player
     end
   end
   
-  # Classe Game
+  # Class Game
   class Game
     def initialize
       @board = Board.new
